@@ -3,18 +3,31 @@
 <head>
   <meta charset="utf-8">
   {% load staticfiles %}
-  <link rel="stylesheet" href="{% static 'login_registration/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'djangobelt/css/dashboard.css' %}">
   <title>Dashboard</title>
 </head>
 <body>
   <div id="container">
+   
     <div id="header">
-      <h1>Headers</h1>
-      <a href="/logout" class="button">Logout</a>
+      <div>
+        {% load staticfiles %}
+        <img src="{% static 'djangobelt/images/dojo_logo.png' %}" alt="logo" class="logo"/>
+        <div class="apptitle">BlackBelt dJango</div>
+      </div>
+      <a href="/logout">Log off</a>
+      <p>Welcome <b>{{ request.session.username }}</b></p>
+    </div>
+    
+    <div id="footer">
+      <h4>
+        <center>
+          <img src="{% static 'djangobelt/images/dojo_logo.png' %}" alt="logo" class="logo"/>
+          CodingDojo - Dallas | django Blackbelt Exam -  by Bryan Utley (Dec 16, 2016)
+        </center>
+      </h4>
     </div>
 
-    
-    
   </div>
 </body>
 </html>

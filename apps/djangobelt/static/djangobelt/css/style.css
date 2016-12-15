@@ -22,7 +22,7 @@ body {
   margin-bottom       : 14px;
   text-shadow         : 1px 1px 1px black;
   background-color    : rgba(255,255,255,.3);
-  border              : 1px solid black;
+  border              : 1px solid white;
   border-radius       : 6px;
   box-shadow          : 2px 2px 2px black;
 }
@@ -47,15 +47,16 @@ label {
   border              : 1px solid black;
   float               : left;
   padding             : 5px 8px;
+  border              : 1px solid black;
   border-radius       : 6px;
   box-shadow          : 2px 2px 2px black;
 }
 #login {
   margin-right        : 40px;
 }
-input[name            ="birthday"] {
-  width               : 156px;
-  height: 19px;
+input[name="birthday"] {
+  width               : 163px;
+  height              : 19px;
   margin              : 4px 0 0 0;
   padding             : 0 3px;
 }
