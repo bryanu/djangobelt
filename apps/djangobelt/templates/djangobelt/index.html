@@ -9,7 +9,13 @@
 </head>
 <body>
   <div id="container">
-    <div id="header"><h1>Please Login</h1></div>
+
+    <div id="header">
+      {% load staticfiles %}
+      <img src="{% static 'djangobelt/images/dojo_logo.png' %}" alt="logo" class="logo"/>
+      <div class="apptitle">BlackBelt dJango</div>
+    </div>
+    
     <div id="login" class="box">
       <h2>Login</h2>
       <form action="/login" method="POST">
@@ -17,14 +23,16 @@
         <label>Email:    </label><input type="text"     name="email"    class="input" />
         <label>Password: </label><input type="password" name="password" class="input" />
         <input type="submit" class="submit">
-        {% if messages %}
-          <ul class="messages">
-          {% for message in messages %}
-            {% if 'login' in message.tags %}
-              <li>{{ message }}</li>
-            {% endif %}  
-          {% endfor %}
-          </ul>
+          {% if messages %}
+           <div class="errors">
+            <ul class="messages">
+            {% for message in messages %}
+              {% if 'login' in message.tags %}
+                <li>{{ message }}</li>
+              {% endif %}  
+            {% endfor %}
+            </ul>
+          </div>
         {% endif %}
       </form>
     </div>
@@ -32,22 +40,24 @@
      <h2>Register</h2>
       <form action="/register" method="POST">
         {% csrf_token %}
-        <label>First Name:</label><input type="text"     name="fname"     value="{{ request.session.formdata.fname }}" class="input" />
-        <label>Last Name: </label><input type="text"     name="lname"     value="{{ request.session.formdata.lname }}" class="input" />
-        <label>Email:     </label><input type="text"     name="email"     value="{{ request.session.formdata.email }}" class="input" />
-        <label>Birthdate: </label><input type="date"     name="birthday"  value=""                                     class="input" />
-        <label>Password:  </label><input type="password" name="password"  value=""                                     class="input" />
-        <label>Confirm:   </label><input type="password" name="password2" value=""                                     class="input" />
+        <label>Name:      </label><input type="text"     name="name"       value="{{ request.session.formdata.fname }}" class="input" />
+        <label>Alias:     </label><input type="text"     name="alias"      value="{{ request.session.formdata.lname }}" class="input" />
+        <label>Email:     </label><input type="text"     name="email"      value="{{ request.session.formdata.email }}" class="input" />
+        <label>Birthdate: </label><input type="date"     name="birthdate"  value="{{ request.session.formdata.bdate }}" class="input" />
+        <label>Password:  </label><input type="password" name="password"   value=""                                     class="input" />
+        <label>Confirm:   </label><input type="password" name="password2"  value=""                                     class="input" />
         <input type="submit" class="submit">
-        {% if messages %}
-          <ul class="messages">
-          {% for message in messages %}
-            {% if 'register' in message.tags %}
-              <li>{{ message }}</li>
-            {% endif %}  
-          {% endfor %}
-          </ul>
-        {% endif %}
+          {% if messages %}
+            <div class="errors">
+              <ul class="messages">
+              {% for message in messages %}
+                {% if 'register' in message.tags %}
+                  <li>{{ message }}</li>
+                {% endif %}  
+              {% endfor %}
+              </ul>
+          </div>
+          {% endif %}
       </form>
     </div>
   </div>

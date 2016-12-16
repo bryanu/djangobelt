@@ -1,9 +1,10 @@
 from __future__ import unicode_literals
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.db import models
 import re
-import datetime
 import bcrypt
+import datetime
 
 class UserManager(models.Manager):
 
@@ -23,7 +24,7 @@ class UserManager(models.Manager):
       return False
     request.session['loggedin'] = True
     request.session['userid']   = user.id
-    request.session['username'] = user.first_name + " " + user.last_name
+    request.session['username'] = user.name
     return True
   
 
@@ -39,13 +40,20 @@ class UserManager(models.Manager):
   def register(self, request, reg_info):
     errors = False
     
-    if not re.match(r"[a-zA-Z]{2,}",reg_info['fname']): # Alpha ONLY and 2 characters min.
+    if not re.match(r"[a-zA-Z]{2,}",reg_info['name']): # Alpha ONLY and 2 characters min.
       messages.error(request, "First Name: Must be at least 2 characters long.", extra_tags="register")
       errors = True
-    if not re.match(r"[a-zA-Z]{2,}",reg_info['lname']): # Alpha ONLY and 2 characters min.
+    if not re.match(r"[a-zA-Z]{2,}",reg_info['alias']): # Alpha ONLY and 2 characters min.
       messages.error(request, "Last Name: Must be at least 2 characters long.", extra_tags="register")
       errors = True
-    if not re.match(r"[^@]+@[^@]+\.[^@]+",reg_info['email']): # Valid email address
+      
+    
+#    if not re.match(r"\d{2}[-/]\d{2}[-/]\d{4}",reg_info['birthdate']): # Valid email address
+#      messages.error(request, "Please enter a valid birthdate (mm/dd/yyyy)", extra_tags="register")
+#      errors = True
+      
+      
+    if not re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)",reg_info['email']): # Valid email address
       messages.error(request, "Email: Must be a valid email address.", extra_tags="register")
       errors = True
     if not re.match(r"[a-zA-Z0-9]{8,}",reg_info['password']): # Alpha-Numberic - 8 characters min.
@@ -61,9 +69,10 @@ class UserManager(models.Manager):
     securepass = bcrypt.hashpw(reg_info['password'].encode('utf-8'), bcrypt.gensalt())
 
     user = User.objects.create(
-      first_name = reg_info['fname'],
-      last_name  = reg_info['lname'],
+      name       = reg_info['name'],
+      alias      = reg_info['alias'],
       username   = reg_info['email'],
+      birthdate  = reg_info['birthdate'],
       password   = securepass
     )
 
@@ -72,21 +81,36 @@ class UserManager(models.Manager):
     if user.id != None:
       request.session['loggedin'] = True
       request.session['userid']   = user.id
-      request.session['username'] = reg_info['fname'] + " " + reg_info['lname']
+      request.session['username'] = reg_info['name']
       return True
     else:
       return False
 
 
 class User(models.Model):
-  first_name = models.CharField(max_length=45)
-  last_name  = models.CharField(max_length=45)
-  birthday   = models.DateField(null=True, blank=True)
-  username   = models.CharField(max_length=60)
+  name       = models.CharField(max_length=45)
+  alias      = models.CharField(max_length=45)
+  username   = models.CharField(max_length=45)
   password   = models.CharField(max_length=100)
+  birthdate  = models.DateTimeField(auto_now_add=False)
   created_at = models.DateTimeField(auto_now_add = True)
   updated_at = models.DateTimeField(auto_now = True)
-  
-  objects = UserManager()
+  objects    = UserManager()
 
+  
+class FriendManager(models.Manager):
+  def friend(self, user_id, friend_id):
+    user        = User.objects.get(id = user_id)
+    friend_user = User.objects.get(id = friend_id)
+    self.create(frienduser=friend_user, befriender=user)
+    return True
+  
+class Friend(models.Model):
+  frienduser = models.ForeignKey(User, related_name='friend_user')
+  befriender = models.ForeignKey(User, related_name='befriender')
+  created_at = models.DateField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)
+  objects = FriendManager()
+
+  
   

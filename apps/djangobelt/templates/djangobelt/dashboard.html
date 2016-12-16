@@ -13,11 +13,67 @@
       <div>
         {% load staticfiles %}
         <img src="{% static 'djangobelt/images/dojo_logo.png' %}" alt="logo" class="logo"/>
-        <div class="apptitle">BlackBelt dJango</div>
+        <div class="apptitle">Friends</div>
       </div>
       <a href="/logout">Log off</a>
       <p>Welcome <b>{{ request.session.username }}</b></p>
     </div>
+
+    <div id="results">
+      <div class="userlist">
+        <h2>Here is the list of your friends:</h2>
+        <div class="Table">
+          <div class="TRow">
+            <div class="THead alias">     <strong>Alias</strong></div>
+            <div class="THead buttoncell"><strong>Action</strong></div>
+          </div>
+          
+          {% for user in friends %}
+          <div class="TRow">
+            <div class="TCell alias tall">{{user.name}}</div>
+            <div class="TCell buttoncell tall">
+              <form action="viewuser/{{user.id}}" method="POST">
+                {% csrf_token %}
+                <input type="submit" value="View Profile" class="button">
+              </form>
+              <div class="spacer"> </div>
+              <form action="removefriend/{{user.id}}" method="POST">
+                {% csrf_token %}
+                <input type="submit" value="Remove as friend" class="button">
+              </form>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        
+        <h2>Other Users not on your friend's list:</h2>
+        <div class="Table">
+          <div class="TRow">
+            <div class="THead alias">     <strong>Alias</strong></div>
+            <div class="THead buttoncell2"><strong>Action</strong></div>
+          </div>
+          {% for user in nonfriends %}
+          <div class="TRow">
+            <div class="TCell alias">
+              <form action="viewuser/{{user.id}}" method="POST">
+                {% csrf_token %}
+                <input type="submit" value="{{user.alias}}" class="buttonlink">
+              </form>
+            </div>
+            <div class="TCell buttoncell2">
+              <form action="befrienduser/{{user.id}}" method="POST">
+                {% csrf_token %}
+                <input type="submit" value="Add as a Friend" class="button">
+              </form>
+            
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        
+        
+      </div>
+    </div>    
     
     <div id="footer">
       <h4>
