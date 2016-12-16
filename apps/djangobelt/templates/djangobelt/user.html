@@ -19,10 +19,12 @@
       <a href="/">Home</a>
       <p>Welcome <b>{{ request.session.username }}</b></p>
     </div>
-
-   <h2>{{ alias }}'s Profile:</h2>
-    <h3>Name: {{name}}</h3>
-    <h3>Email Address: {{username}}</h3>
+    <div class="wrapper">
+     <h2>{{ alias }}'s Profile:</h2>
+     <br />
+      <h3>Name: {{name}}</h3>
+      <h3>Email Address: {{username}}</h3>
+    </div>
     <div id="footer">
       <h4>
         <center>

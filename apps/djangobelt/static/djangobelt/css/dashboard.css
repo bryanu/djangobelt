@@ -2,6 +2,9 @@
   margin              : 0;
   padding             : 0;
 }
+h3 {
+  margin-left: 17px;
+}
 body {
   font-family         : Arial, 'Helvetica Neue', Helvetica, sans-serif;
 }
@@ -61,7 +64,7 @@ ul {
   padding             : 4px 1.1%;
   height              : 28px;
   width               : 465px;
-  display             : inline-block;
+/*  display             : inline-block;*/
 }
 .buttoncell2 {
   padding             : 4px 1.1%;
@@ -77,12 +80,10 @@ ul {
   cursor: pointer; 
   cursor: hand
 }
-.pokecount {
-  width: 70px;
-  text-align: center;
-}
+
 .tall {
   height: 60px;
+  
 }
 .spacer {
   height: 5px;
@@ -161,20 +162,14 @@ ul {
   margin: 0 auto;
 }
 
-.pokes {
-  margin-bottom: 5px;
-}
-
-.pokedby {
-  width: 500px;
-  margin: 0 0 18px 10px;
-  padding: 4px 0;
-}
-
 li {
   font-size: 21px;
   padding-top: 2px;
 }
 h2 {
   margin-top: 20px;
+}
+.wrapper {
+  width: 95%;
+  margin: 10px auto;
 }

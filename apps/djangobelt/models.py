@@ -46,13 +46,9 @@ class UserManager(models.Manager):
     if not re.match(r"[a-zA-Z]{2,}",reg_info['alias']): # Alpha ONLY and 2 characters min.
       messages.error(request, "Last Name: Must be at least 2 characters long.", extra_tags="register")
       errors = True
-      
-    
-#    if not re.match(r"\d{2}[-/]\d{2}[-/]\d{4}",reg_info['birthdate']): # Valid email address
-#      messages.error(request, "Please enter a valid birthdate (mm/dd/yyyy)", extra_tags="register")
-#      errors = True
-      
-      
+    if not re.match(r"^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$",reg_info['birthdate']): # Valid email address
+      messages.error(request, "Please enter a valid birthdate (mm/dd/yyyy)", extra_tags="register")
+      errors = True
     if not re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)",reg_info['email']): # Valid email address
       messages.error(request, "Email: Must be a valid email address.", extra_tags="register")
       errors = True
