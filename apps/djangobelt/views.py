@@ -45,38 +45,46 @@ def friends(request):
   # Get all users except the logged in user id
   otherusers = User.objects.exclude(id=id)
 
+  print "*"*50
+  print "first: ",otherusers
+  print "*"*50
+  
   # Gets all friend objects where user was beFriended
   myfriends = Friend.objects.filter(befriender = user)
 
+  otherusers.exclude(id__in=myfriends)
+
   print "*"*50
-  print "user = ",user.id
-  print "myfriends = " , myfriends
+  print "second: ",otherusers
   print "*"*50
   
   friendlist = []
   for friend in myfriends:
     f = User.objects.get(id=friend.frienduser.id)
     friendlist.append(f)
-
+    
   context = {
-    "friends": friendlist,
+    "friends":    friendlist,
     "nonfriends": otherusers
   }
   return render(request, 'djangobelt/dashboard.html', context)
+
 
 def befrienduser(request, id):
   friends = Friend.objects.filter(frienduser = id).count()
   if friends < 1:
     Friend.objects.friend(request.session['userid'], id)
+    Friend.objects.friend(id, request.session['userid'])
   return redirect('/dashboard')
+
 
 def viewuser(request, id):
   if 'loggedin' not in request.session:
     return redirect(index)
   user = User.objects.get(id=id)
   context = {
-    "alias": user.alias,
-    "name": user.name,
+    "alias":    user.alias,
+    "name":     user.name,
     "username": user.username
   }
   return render(request, 'djangobelt/user.html', context)
@@ -84,6 +92,7 @@ def viewuser(request, id):
 def removefriend(request, id):
   userid = request.session['userid']
   Friend.objects.filter(frienduser = id, befriender = userid).delete()
+  Friend.objects.filter(frienduser = userid, befriender = id).delete()
   return redirect('/dashboard')
   
   

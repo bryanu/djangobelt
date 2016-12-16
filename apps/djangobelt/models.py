@@ -14,9 +14,7 @@ class UserManager(models.Manager):
     except self.model.DoesNotExist:
       messages.error(request, "email/password combination is incorrect!", extra_tags="login")
       return False
-
     pwcheck = bcrypt.hashpw(password.encode('utf-8'), user.password.encode('utf-8'))
-
     if pwcheck != user.password:
       request.session['loggedin'] = False
       request.session['userid']   = 0
@@ -39,7 +37,6 @@ class UserManager(models.Manager):
   
   def register(self, request, reg_info):
     errors = False
-    
     if not re.match(r"[a-zA-Z]{2,}",reg_info['name']): # Alpha ONLY and 2 characters min.
       messages.error(request, "First Name: Must be at least 2 characters long.", extra_tags="register")
       errors = True
@@ -58,12 +55,9 @@ class UserManager(models.Manager):
     if reg_info['password'] != reg_info['password2']: # Passwords must match
       messages.error(request, "Confirmation Password: Must match password entered.", extra_tags="register")
       errors = True
-
     if errors:
       return False
-
     securepass = bcrypt.hashpw(reg_info['password'].encode('utf-8'), bcrypt.gensalt())
-
     user = User.objects.create(
       name       = reg_info['name'],
       alias      = reg_info['alias'],
@@ -71,9 +65,7 @@ class UserManager(models.Manager):
       birthdate  = reg_info['birthdate'],
       password   = securepass
     )
-
     user.save()
-  
     if user.id != None:
       request.session['loggedin'] = True
       request.session['userid']   = user.id
@@ -100,6 +92,7 @@ class FriendManager(models.Manager):
     friend_user = User.objects.get(id = friend_id)
     self.create(frienduser=friend_user, befriender=user)
     return True
+  
   
 class Friend(models.Model):
   frienduser = models.ForeignKey(User, related_name='friend_user')
