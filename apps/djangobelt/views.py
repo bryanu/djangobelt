@@ -52,7 +52,7 @@ def friends(request):
   # Gets all friend objects where user was beFriended
   myfriends = Friend.objects.filter(befriender = user)
 
-  otherusers.exclude(id__in=myfriends)
+  #otherusers = otherusers.exclude(id__in=myfriends.values_list('frienduser_id', flat=True))
 
   print "*"*50
   print "second: ",otherusers
